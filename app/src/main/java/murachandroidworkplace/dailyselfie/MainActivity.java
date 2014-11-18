@@ -30,19 +30,17 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.camera_icon) {
             Log.i(TAG, "camera's icon pressed");
             dispatchTakePictureIntent();
@@ -52,6 +50,11 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    Encodes the photo in the return Intent delivered to onActivityResult()
+    as a small Bitmap in the extras, under the key "data". The following code retrieves this image and displays
+    it in an ImageView.
+    */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
@@ -62,6 +65,9 @@ public class MainActivity extends Activity {
         }
     }
 
+    /*
+    Invokes an intent to capture a photo
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
