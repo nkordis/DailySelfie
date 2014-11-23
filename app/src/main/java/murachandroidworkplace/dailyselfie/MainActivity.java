@@ -1,6 +1,6 @@
 package murachandroidworkplace.dailyselfie;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,23 +8,24 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 
-public class MainActivity extends Activity {
+
+public class MainActivity extends ListActivity {
 
     private static final String TAG = "Daily Selfie";
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    ImageView mImageView;
+    PhotosListAdapter mAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        mImageView = (ImageView)findViewById(R.id.imageView);
+        mAdapter = new PhotosListAdapter(getApplicationContext());
+        setListAdapter(mAdapter);
     }
 
 
@@ -59,7 +60,7 @@ public class MainActivity extends Activity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
+            mAdapter.add(imageBitmap);
 
             Log.i(TAG, "Image data returned");
         }
