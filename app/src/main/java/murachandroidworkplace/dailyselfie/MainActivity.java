@@ -7,10 +7,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +37,21 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(TAG, "entered onItemClick");
+                PhotoRecord photoRecord = (PhotoRecord)mAdapter.getItem(position);
+                Bitmap bitmap = photoRecord.getmPhotoBitmap();
+
+                Intent photoLargeIntent = new Intent(MainActivity.this, PhotoActivity.class);
+                photoLargeIntent.putExtra("bitmap", (Parcelable)bitmap);
+                photoLargeIntent.putExtra("fileName", mFileName);
+
+                startActivity(photoLargeIntent);
+            }
+        });
 
         mAdapter = new PhotosListAdapter(getApplicationContext());
         mAdapter.addAllViews();
