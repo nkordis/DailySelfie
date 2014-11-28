@@ -3,12 +3,19 @@ package murachandroidworkplace.dailyselfie;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends ListActivity {
@@ -18,6 +25,10 @@ public class MainActivity extends ListActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     PhotosListAdapter mAdapter;
+    String mCurrentPhotoPath;
+    String mFileName;
+    File photoFile;
+    String timeStamp;
 
 
     @Override
@@ -25,9 +36,106 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         mAdapter = new PhotosListAdapter(getApplicationContext());
+        mAdapter.addAllViews();
         setListAdapter(mAdapter);
     }
 
+
+
+
+    /*
+    Encodes the photo in the return Intent delivered to onActivityResult()
+    as a small Bitmap in the extras, under the key "data". The following code retrieves this image and displays
+    it in an ImageView.
+    */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "entered onActivityResult");
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Log.i(TAG, "resultCode == RESULT_OK ");
+
+
+            galleryAddPic();
+            Bitmap imageBitmap = setPic();
+
+
+
+            PhotoRecord photoRecord = new PhotoRecord(imageBitmap,mCurrentPhotoPath,mFileName,timeStamp);
+
+            mAdapter.add(photoRecord);
+            Log.i(TAG, "exit onActivityResult");
+        }
+    }
+
+    /*
+    Invokes an intent to capture a photo
+     */
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.i(TAG, ex.getMessage());
+
+            }
+
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+
+
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+
+
+        File image = new File(storageDir,imageFileName+".jpg");
+        //  storageDir.mkdirs();
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mFileName = image.getAbsolutePath();
+
+        return image;
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+    private Bitmap setPic(){
+
+
+
+        int scaleFactor = 5;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mFileName, bmOptions);
+        //  mImageView.setImageBitmap(bitmap);
+
+
+        return bitmap;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,31 +157,5 @@ public class MainActivity extends ListActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /*
-    Encodes the photo in the return Intent delivered to onActivityResult()
-    as a small Bitmap in the extras, under the key "data". The following code retrieves this image and displays
-    it in an ImageView.
-    */
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            PhotoRecord photoRecord = new PhotoRecord(imageBitmap,null,null,null);
-            mAdapter.add(photoRecord);
-
-            Log.i(TAG, "Image data returned");
-        }
-    }
-
-    /*
-    Invokes an intent to capture a photo
-     */
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
     }
 }
