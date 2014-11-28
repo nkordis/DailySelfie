@@ -2,7 +2,6 @@ package murachandroidworkplace.dailyselfie;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,9 @@ public class PhotosListAdapter extends BaseAdapter {
         ImageView image;
     }
 
-    private final List<Bitmap> mItems = new ArrayList<Bitmap>();
+    ViewHolder holder = new ViewHolder();
+
+    private final List<PhotoRecord> mItems = new ArrayList<PhotoRecord>();
     private final Context mContext;
 
     public PhotosListAdapter(Context context) {
@@ -56,7 +57,7 @@ public class PhotosListAdapter extends BaseAdapter {
     // See: http://developer.android.com/training/improving-layouts/smooth-scrolling.html
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Bitmap currentBitmap = mItems.get(position);
+        final PhotoRecord currentRecord = mItems.get(position);
 
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
@@ -68,8 +69,8 @@ public class PhotosListAdapter extends BaseAdapter {
             itemLayout.setTag(holder);
         }
 
-        final ViewHolder holder = (ViewHolder)itemLayout.getTag();
-        holder.image.setImageBitmap(currentBitmap);
+         holder = (ViewHolder)itemLayout.getTag();
+        holder.image.setImageBitmap(currentRecord.getmPhotoBitmap());
 
         return itemLayout;
     }
@@ -78,7 +79,7 @@ public class PhotosListAdapter extends BaseAdapter {
 
     // Add a ToDoItem to the adapter
     // Notify observers that the data set has changed
-    public void add(Bitmap item) {
+    public void add(PhotoRecord item) {
 
         mItems.add(item);
         notifyDataSetChanged();

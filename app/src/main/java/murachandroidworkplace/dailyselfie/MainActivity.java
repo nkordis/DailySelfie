@@ -60,7 +60,8 @@ public class MainActivity extends ListActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mAdapter.add(imageBitmap);
+            PhotoRecord photoRecord = new PhotoRecord(imageBitmap,null,null,null);
+            mAdapter.add(photoRecord);
 
             Log.i(TAG, "Image data returned");
         }
