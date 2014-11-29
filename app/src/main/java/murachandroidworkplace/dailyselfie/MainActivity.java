@@ -1,6 +1,8 @@
 package murachandroidworkplace.dailyselfie;
 
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +20,7 @@ import android.widget.AdapterView;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -33,6 +36,9 @@ public class MainActivity extends ListActivity {
     File photoFile;
     String timeStamp;
 
+    static PendingIntent pendingIntent;
+    static AlarmManager alarmManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,22 +48,27 @@ public class MainActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i(TAG, "entered onItemClick");
-                PhotoRecord photoRecord = (PhotoRecord)mAdapter.getItem(position);
+                PhotoRecord photoRecord = (PhotoRecord) mAdapter.getItem(position);
                 Bitmap bitmap = photoRecord.getmPhotoBitmap();
 
                 Intent photoLargeIntent = new Intent(MainActivity.this, PhotoActivity.class);
-                photoLargeIntent.putExtra("bitmap", (Parcelable)bitmap);
+                photoLargeIntent.putExtra("bitmap", (Parcelable) bitmap);
                 photoLargeIntent.putExtra("fileName", mFileName);
 
                 startActivity(photoLargeIntent);
             }
         });
 
+        Intent intentsOpen = new Intent(this, AlarmReceiver.class);
+        intentsOpen.setAction("murachandroidworkplace.takephoto.alarm.ACTION");
+        pendingIntent = PendingIntent.getBroadcast(this, 111, intentsOpen, 0);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        //fireAlarm();
+
         mAdapter = new PhotosListAdapter(getApplicationContext());
         mAdapter.addAllViews();
         setListAdapter(mAdapter);
     }
-
 
 
 
@@ -149,10 +160,30 @@ public class MainActivity extends ListActivity {
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mFileName, bmOptions);
-        //  mImageView.setImageBitmap(bitmap);
 
 
         return bitmap;
+    }
+
+    public void fireAlarm() {
+        /**
+         * call broadcast receiver
+         */
+         final int TWO_MINUTES = 2 * 60 * 1000;
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + TWO_MINUTES, TWO_MINUTES, pendingIntent);
+
+
+    }
+
+    public void stopAlarm(){
+        alarmManager.cancel(pendingIntent);
+
+
+
     }
 
     @Override
@@ -172,6 +203,14 @@ public class MainActivity extends ListActivity {
             Log.i(TAG, "camera's icon pressed");
             dispatchTakePictureIntent();
             return true;
+        }
+
+        if(id == R.id.stop_alarm){
+            stopAlarm();
+        }
+
+        if(id == R.id.start_alarm){
+            fireAlarm();
         }
 
         return super.onOptionsItemSelected(item);
