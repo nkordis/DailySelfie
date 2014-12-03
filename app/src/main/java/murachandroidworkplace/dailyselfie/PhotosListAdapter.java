@@ -22,6 +22,8 @@ public class PhotosListAdapter extends BaseAdapter {
 
     private static final String TAG = "PhotoListAdapter";
 
+
+
     private static class ViewHolder {
         ImageView image;
         TextView fileName;
@@ -134,5 +136,8 @@ public class PhotosListAdapter extends BaseAdapter {
         Log.i(TAG, "List view updated");
 
 
+    }
+
+    public void removeAllViews() {
     }
 }

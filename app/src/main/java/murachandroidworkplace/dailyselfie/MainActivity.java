@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -198,20 +199,25 @@ public class MainActivity extends ListActivity {
 
         int id = item.getItemId();
 
+        switch (item.getItemId()) {
 
-        if (id == R.id.camera_icon) {
+            case R.id.camera_icon:
             Log.i(TAG, "camera's icon pressed");
             dispatchTakePictureIntent();
             return true;
-        }
 
-        if(id == R.id.stop_alarm){
+            case R.id.cancel_alarm:
             stopAlarm();
+            Toast.makeText(this, "Alarm canceled", Toast.LENGTH_SHORT).show();
+            return true;
+
+            case R.id.set_alarm:
+            fireAlarm();
+            Toast.makeText(this, "Alarm set", Toast.LENGTH_SHORT).show();
+            return true;
         }
 
-        if(id == R.id.start_alarm){
-            fireAlarm();
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
