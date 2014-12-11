@@ -9,7 +9,7 @@ public class PhotoRecord {
     private Bitmap mPhotoBitmap;
     private String mPhotoPath;
     private String fileName;
-    private String timeStamp;
+    private String timeStamp; //TODO Create a new  field Date or replace String timeStamp
 
     public PhotoRecord() {
     }

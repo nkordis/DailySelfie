@@ -29,6 +29,7 @@ public class PhotosListAdapter extends BaseAdapter {
     private static class ViewHolder {
         ImageView image;
         TextView fileName;
+        // TODO Declare delete icon View
     }
 
     ViewHolder holder = new ViewHolder();
@@ -75,8 +76,12 @@ public class PhotosListAdapter extends BaseAdapter {
             itemLayout = (RelativeLayout) inflater.inflate(R.layout.selfie, parent, false);
 
             holder.image = (ImageView)itemLayout.findViewById(R.id.imageView);
+            //TODO Set holder.image to be clickable
             holder.fileName = (TextView)itemLayout.findViewById(R.id.textView);
+            //TODO Set holder.filename to be clickable
 
+            //TODO Assign holder.delete icon View
+            //TODO Set holder.delete icon to be clickable
             itemLayout.setTag(holder);
         }
 

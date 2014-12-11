@@ -6,5 +6,12 @@
     <string name="stop_alarm_text">Cancel Alarm</string>
     <string name="set_alarm_text">Set Alarm</string>
     <string name="deletallpics">Delete all selfies</string>
+    <string name="about_text">An application that periodically reminds the user to take a selfie.
+        Over time the user will capture many selfies and thus will be able to see
+        him/her change.
+        The user can also set an alarm that notifies him/her every 24 hours after the alarm is set.
+    </string>
+    <!-- TODO Improve about_test -->
+    <string name="about_text_title">About</string>
 
 </resources>

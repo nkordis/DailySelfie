@@ -1,8 +1,10 @@
 package murachandroidworkplace.dailyselfie;
 
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,11 +33,13 @@ public class MainActivity extends ListActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    final Context context = this;
+
     PhotosListAdapter mAdapter;
     String mCurrentPhotoPath;
     String mFileName;
     File photoFile;
-    String timeStamp;
+    String timeStamp; //TODO Create Date variable or replace String timeStamp
 
     static PendingIntent pendingIntent;
     static AlarmManager alarmManager;
@@ -46,6 +50,7 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //TODO Delete item's clickability. Items must be clickable in the PhotosListAdapter.
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -126,6 +131,8 @@ public class MainActivity extends ListActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        //TODO Assign value to Date variable
+
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
@@ -218,9 +225,20 @@ public class MainActivity extends ListActivity {
             return true;
 
             case R.id.deletallpics:
+                //TODO Create a dialog asking the users if he/she wants to delete all selfies
                 mAdapter.deleteAllPics();
                 mAdapter.removeAllViews();
                 return true;
+
+            case R.id.about:
+                //TODO Create a button to dismiss the dialog
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.dialog);
+                dialog.setTitle(R.string.about_text_title);
+                dialog.show();
+                return true;
+
+            //TODO Create option so the user can customize the alarm
         }
 
 

@@ -18,7 +18,7 @@ public class PhotoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_activity);
-
+        //TODO Display selfie in full View
         Intent intent = getIntent();
         Bitmap bitmap = (Bitmap) intent.getParcelableExtra("bitmap");
         mCurrentPhotoPath = (String)intent.getStringExtra("fileName");

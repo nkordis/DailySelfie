@@ -23,4 +23,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 
+    <!--TODO Add a delete photo icon -->
+
 </RelativeLayout>
