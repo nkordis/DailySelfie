@@ -70,7 +70,7 @@ public class PhotosListAdapter extends BaseAdapter {
 
         RelativeLayout itemLayout = (RelativeLayout) convertView;
         if (convertView == null) {
-            itemLayout = (RelativeLayout) inflater.inflate(R.layout.activity_main, parent, false);
+            itemLayout = (RelativeLayout) inflater.inflate(R.layout.selfie, parent, false);
 
             holder.image = (ImageView)itemLayout.findViewById(R.id.imageView);
             holder.fileName = (TextView)itemLayout.findViewById(R.id.textView);
