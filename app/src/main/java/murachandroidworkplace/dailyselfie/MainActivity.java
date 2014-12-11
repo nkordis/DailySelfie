@@ -179,11 +179,12 @@ public class MainActivity extends ListActivity {
          * call broadcast receiver
          */
          final int TWO_MINUTES = 2 * 60 * 1000;
+         final int ONE_DAY = 24 * 60 * 60 * 1000;
 
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + TWO_MINUTES, TWO_MINUTES, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + ONE_DAY, ONE_DAY, pendingIntent);
 
 
     }

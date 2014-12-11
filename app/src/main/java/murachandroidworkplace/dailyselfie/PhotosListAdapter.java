@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -109,26 +110,35 @@ public class PhotosListAdapter extends BaseAdapter {
 
     }
 
+
     public void addAllViews() {
-        File folder = new File("/storage/sdcard/Pictures/");
+       // File folder = new File("/storage/sdcard/Pictures/");
+        File folder = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures");
         File[] fileList = folder.listFiles();
-        Log.i(TAG, Integer.toString(fileList.length));
-        for (int i = 0; i < fileList.length; i++) {
-            String filePath = fileList[i].getAbsolutePath();
-            String filename = fileList[i].getName();
 
-            String fileTimestamp = filename.substring(5, 20);
-            PhotoRecord listItem = new PhotoRecord();
+        if(fileList == null){
 
-            listItem.setmPhotoPath(filePath);
-            Bitmap mbitmap = setPic(filePath);
+        }else {
 
-            listItem.setmPhotoBitmap(mbitmap);
-            listItem.setTimeStamp(fileTimestamp);
-            add(listItem);
+            for (int i = 0; i < fileList.length; i++) {
+                String filePath = fileList[i].getAbsolutePath();
+                String filename = fileList[i].getName();
+
+                String fileTimestamp = filename.substring(5, 20);
+                PhotoRecord listItem = new PhotoRecord();
+
+                listItem.setmPhotoPath(filePath);
+                Bitmap mbitmap = setPic(filePath);
+
+                listItem.setmPhotoBitmap(mbitmap);
+                listItem.setTimeStamp(fileTimestamp);
+                add(listItem);
+            }
         }
 
     }
+
+
 
 
 
@@ -160,7 +170,7 @@ public class PhotosListAdapter extends BaseAdapter {
     }
 
     private File[] getFileList() {
-        String path = Environment.getExternalStorageDirectory().toString();
+        String path = Environment.getExternalStorageDirectory().toString() + "/Pictures";
         File f = new File(path);
         if (f.exists()) {
             return f.listFiles();
