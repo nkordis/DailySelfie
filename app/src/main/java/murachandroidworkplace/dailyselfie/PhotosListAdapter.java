@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.util.List;
 public class PhotosListAdapter extends BaseAdapter {
 
     private static final String TAG = "PhotoListAdapter";
+
 
 
 
@@ -138,6 +140,30 @@ public class PhotosListAdapter extends BaseAdapter {
 
     }
 
-    public void removeAllViews() {
+    public void deleteAllPics() {
+        File file[] = getFileList();
+        if (file.length > 0) {
+            for (File f : file) {
+                f.delete();
+            }
+        }
     }
+
+    public void removeAllViews() {
+        mItems.clear();
+        this.notifyDataSetChanged();
+    }
+
+    private File[] getFileList() {
+        String path = Environment.getExternalStorageDirectory().toString();
+        File f = new File(path);
+        if (f.exists()) {
+            return f.listFiles();
+        } else {
+            f.mkdir();
+            return new File[0];
+        }
+    }
+
+
 }

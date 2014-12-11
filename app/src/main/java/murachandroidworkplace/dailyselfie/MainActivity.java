@@ -216,6 +216,11 @@ public class MainActivity extends ListActivity {
             fireAlarm();
             Toast.makeText(this, "Alarm set", Toast.LENGTH_SHORT).show();
             return true;
+
+            case R.id.deletallpics:
+                mAdapter.deleteAllPics();
+                mAdapter.removeAllViews();
+                return true;
         }
 
 

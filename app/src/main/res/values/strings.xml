@@ -5,5 +5,6 @@
     <string name="camera_icon_string">Camera</string>
     <string name="stop_alarm_text">Cancel Alarm</string>
     <string name="set_alarm_text">Set Alarm</string>
+    <string name="deletallpics">Delete all selfies</string>
 
 </resources>
